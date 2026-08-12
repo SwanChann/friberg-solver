@@ -4,8 +4,8 @@
 - durable_goal: Deliver a reliable local csgofriberg Major player filter and feedback solver that matches the upstream game rules and keeps its dataset provenance explicit.
 - success_criteria: Local UI starts; 646-player bootstrap loads; all non-team-history manual filters, multi-guess inference/edit/delete, conservative screenshot OCR with automatic apply, recommendations, import/export, persistence, data tooling, tests, build, and smoke verification succeed; historical-team coverage is explicitly out of scope.
 - active_workstream: friberg-solver open-source release
-- current_milestone: Conservative automatic screenshot OCR verified; GitHub update in progress.
-- current_task: Publish the verified OCR changes through `agent/automatic-ocr-filtering` as a Draft PR against `main`.
+- current_milestone: Conservative automatic screenshot OCR published to GitHub Draft PR #1.
+- current_task: Review CI and merge `agent/automatic-ocr-filtering` into `main` through PR #1.
 - status: verified
 
 ## Milestones
@@ -39,6 +39,7 @@
 - Screenshot OCR uses locally bundled Tesseract.js 7.0.0, LSTM browser cores, and English/Simplified-Chinese trained data. Screenshots are processed in page memory and are not uploaded or persisted.
 - A headless Edge end-to-end OCR smoke used a six-row 800×610 fixture matching the supplied table: the flow rendered no review UI and automatically applied five reliable rows / 35 visible conditions; ambiguous duplicate `NiKo` was discarded as one whole row, while the remaining constraints narrowed 646 players to `jambo` and produced eight next-guess recommendations. Evidence is `.smoke/ocr-board.png` plus the ignored `.smoke/ocr-smoke.ps1` harness.
 - The game board exposes seven visible feedback columns; internal `region` feedback is now derived from the nationality color instead of being requested as an eighth manual field.
+- GitHub Draft PR #1 publishes the verified OCR implementation from `agent/automatic-ocr-filtering` against `main`: `https://github.com/SwanChann/friberg-solver/pull/1`.
 
 ## Decisions
 
