@@ -1,12 +1,12 @@
 # Project State
 
-- last_verified: 2026-08-12 (69 tests, build, data tools, and conservative automatic browser OCR smoke)
+- last_verified: 2026-08-12 (production-v4 canonical data, 69 tests, Pages-mode build, data tools, and automatic browser OCR smoke)
 - durable_goal: Deliver a reliable local csgofriberg Major player filter and feedback solver that matches the upstream game rules and keeps its dataset provenance explicit.
-- success_criteria: Local UI starts; 646-player bootstrap loads; all non-team-history manual filters, multi-guess inference/edit/delete, conservative screenshot OCR with automatic apply, recommendations, import/export, persistence, data tooling, tests, build, and smoke verification succeed; historical-team coverage is explicitly out of scope.
+- success_criteria: Local UI starts; the current 646-player canonical dataset loads; all non-team-history manual filters, multi-guess inference/edit/delete, conservative screenshot OCR with automatic apply, recommendations, import/export, persistence, data tooling, tests, build, and smoke verification succeed; historical-team coverage is explicitly out of scope.
 - active_workstream: friberg-solver open-source release
-- current_milestone: Conservative automatic screenshot OCR published to GitHub Draft PR #1.
-- current_task: Review CI and merge `agent/automatic-ocr-filtering` into `main` through PR #1.
-- status: verified
+- current_milestone: Production-v4 player data and GitHub Pages deployment are verified locally on `agent/sync-production-player-data`.
+- current_task: Publish the data/deployment branch, merge it after CI, and verify the live GitHub Pages site.
+- status: in_progress
 
 ## Milestones
 
@@ -17,6 +17,8 @@
 5. [verified] Re-scope historical-team coverage out of the required release; hide history-dependent controls for the bundled dataset while retaining optional import compatibility.
 6. [verified] Publish the complete project to a public GitHub repository with MIT licensing, contribution guidance, and CI.
 7. [verified] Add user-triggered local screenshot OCR with upload/drag/paste, official-theme row/color/arrow detection, conservative player matching, field-level trust, automatic replacement of the current Guess list, and direct candidate/recommendation refresh without human review.
+8. [verified] Audit all 646 bundled players against the official production site's complete public player roster and public filtering attributes, within the published search rate limit.
+9. [in_progress] Publish the production-v4 canonical dataset and GitHub Pages deployment, then verify the live site and OCR asset loading.
 
 ## Verified Facts
 
@@ -39,7 +41,11 @@
 - Screenshot OCR uses locally bundled Tesseract.js 7.0.0, LSTM browser cores, and English/Simplified-Chinese trained data. Screenshots are processed in page memory and are not uploaded or persisted.
 - A headless Edge end-to-end OCR smoke used a six-row 800×610 fixture matching the supplied table: the flow rendered no review UI and automatically applied five reliable rows / 35 visible conditions; ambiguous duplicate `NiKo` was discarded as one whole row, while the remaining constraints narrowed 646 players to `jambo` and produced eight next-guess recommendations. Evidence is `.smoke/ocr-board.png` plus the ignored `.smoke/ocr-smoke.ps1` harness.
 - The game board exposes seven visible feedback columns; internal `region` feedback is now derived from the nationality color instead of being requested as an eighth manual field.
-- GitHub Draft PR #1 publishes the verified OCR implementation from `agent/automatic-ocr-filtering` against `main`: `https://github.com/SwanChann/friberg-solver/pull/1`.
+- GitHub PR #1 merged the verified OCR implementation into `main` as commit `6b777c7e85ae827703c31f9fc321f2f6ce7586aa`: `https://github.com/SwanChann/friberg-solver/pull/1`.
+- A bounded 2026-08-12 audit used the official production site's normal browser proof-of-work session, `/api/players/list`, and rate-limited `/api/players?search=` responses to cover 646/646 players. The roster and nicknames match exactly, with no missing or unexpected players.
+- Before synchronization, nationality, region, Major championships, and Major appearances matched for all 646 players, while 185 players had at least one differing current field: team for 116, age for 60, role for 48, and active status for 58; individual players may occur in more than one count.
+- The canonical dataset now matches production version 4 for all public IDs and filtering fields. It has 646 unique nicknames and 646 unique official IDs; `data/players.json` exactly matches `data-snapshots/production-public-v4-2026-08-12.json` with SHA-256 `e474efae...10c84bc`.
+- A Pages-base local preview returned HTTP 200 for the app, favicon, OCR worker, SIMD core, and both language packs. The six-row OCR smoke still automatically applied five trusted rows, discarded ambiguous `NiKo`, narrowed to `jambo`, and produced eight recommendations.
 
 ## Decisions
 
@@ -50,14 +56,17 @@
 - Publish the first open-source release directly on `main` because this was a new empty repository with no existing base branch or collaborators requiring a bootstrap pull request.
 - Keep OCR user-triggered and local-only: accept a user-provided screenshot, automatically replace the current Guess list with trusted constraints, and refresh candidates/recommendations. Do not add continuous upstream scraping, automatic guessing/submission, or detection evasion.
 - Per the user's 2026-08-12 decision, never ask for OCR confirmation: discard a whole row when its nickname is uncertain; discard only the affected field when its color/direction is uncertain or team-yellow cannot be evaluated without `team_history`. Retain a read-only ignored-information summary for auditability.
-- Per the user's current GitHub update authorization, publish this feature on an isolated `agent/automatic-ocr-filtering` branch and use a Draft PR before merging into `main`.
+- Per the user's GitHub update authorization, the OCR feature was published on an isolated branch and merged through PR #1 after CI passed.
+- Treat the official production site's public fields as the parity target for this game, while keeping independent real-world biographical verification a separate claim.
+- Per the user's 2026-08-12 authorization, update every public production field, including official IDs and difficulty tags, on the isolated `agent/sync-production-player-data` branch; keep `team_history` empty because the public API does not expose it.
 
 ## Risks And Unknowns
 
-- Current production player attributes cannot be fully verified from public read endpoints; the bundled database remains the provenance-labelled 2026-07-27 snapshot.
+- The production snapshot is point-in-time and may drift after 2026-08-12; the app deliberately has no runtime scraper or automatic refresh.
+- Production public endpoints allow full verification of public solver fields, but not `team_history`; independent real-world correctness beyond parity with the official game has not been established for all 646 players.
 - Historical-team filtering and team-yellow inference are not available for the bundled dataset. The engine retains tested compatibility for future user imports, but imported provenance is user-controlled and not automatically authoritative.
 - OCR geometry is verified for the upstream desktop table and official light/Blast color tokens. Heavy cropping, small images, custom themes, or image compression can cause more rows/fields to be conservatively ignored and therefore produce a broader candidate set.
 
 ## Next Step And User Decision
 
-- The OCR feature is implemented and verified locally. The next remote step is to review and merge the Draft PR from `agent/automatic-ocr-filtering` into `main`; no further implementation decision is required.
+- No user decision is currently required. Publish the verified data/Pages changes through GitHub, then confirm CI, deployment status, live dataset metadata, and online OCR asset availability.

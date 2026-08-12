@@ -1,9 +1,12 @@
 # 弗一把 Player Solver
 
 [![CI](https://github.com/SwanChann/friberg-solver/actions/workflows/ci.yml/badge.svg)](https://github.com/SwanChann/friberg-solver/actions/workflows/ci.yml)
+[![Deploy](https://github.com/SwanChann/friberg-solver/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/SwanChann/friberg-solver/actions/workflows/deploy-pages.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 一个独立、本地运行的 **csgofriberg player filtering / solving companion**。它不是原游戏的复刻，也不会自动操作游戏网站；它把游戏候选数据、人工条件筛选、反馈约束推演和下一猜信息增益推荐放进一个桌面浏览器工具中。
+
+在线使用：<https://swanchann.github.io/friberg-solver/>
 
 ## What
 
@@ -97,17 +100,17 @@ npm run data:validate
 | 字段 | 值 |
 |---|---|
 | Players | 646 |
-| Snapshot | 2026-07-27 |
-| Version | `v31-bootstrap` |
-| 记录的官方来源提交 | `shnlfriberg/csgo-major-db@eb9fd74735039871a5ee00a89a0c50e36d608d0c` |
-| 原始快照 SHA-256 | `c10b84d140100fd114b34d0867456e4d30b6da4ede2d7dbf4e0303b31e5e8e6a` |
-| 可访问镜像证据 | [`LilJay-H/csgofriberg-answer-extension`](https://github.com/LilJay-H/csgofriberg-answer-extension) |
+| Snapshot | 2026-08-12 |
+| Version | `production-v4` |
+| 正式来源 | [`shnlfriberg.online/search`](https://shnlfriberg.online/search) 的公开名单及公开搜索响应 |
+| Canonical SHA-256 | `e474efae1fa257b9dd851c700135f741c243901fa95684acf5dddd2d110c84bc` |
+| 完整性 | 646 个唯一昵称、646 个唯一正式 ID，名单无增删 |
 
-原官方 `shnlfriberg/csgo-major-db` 公开 URL 在 2026-08-12 返回 404。内置快照由公开扩展的逐字节可校验副本恢复；另一个公开镜像 [`LilJay-H/csgo-major-db`](https://github.com/LilJay-H/csgo-major-db) 的历史显示它曾合并原官方仓库。
+这次固定快照通过正式网站的正常浏览器会话取得，遵守公开搜索接口的限速并覆盖 646/646 人。相较 2026-07-27 bootstrap，正式 ID 全部对齐；当前队伍、年龄、位置或现役状态至少一项变化的选手有 185 人。国籍、赛区和两个 Major 数值均无差异。项目只保存核验后的固定快照，不在运行时抓取正式网站。
 
-范围决定：这份公开 646 人快照不含 `team_history`，且生产后台正式导出当前无法取得。本版本不把真实历史队伍作为交付功能，也不会根据常识伪造数据。canonical 内存模型仍把该字段规范化为空数组以保持规则兼容；页面隐藏历史筛选与队伍黄色反馈，并明确提示当前只支持当前队伍。若用户自行导入含历史的数据，兼容能力会自动启用，但这不代表其来源已获官方核验。
+范围决定：生产公开接口不含 `team_history`。本版本不把真实历史队伍作为交付功能，也不会根据常识伪造数据。canonical 内存模型仍把该字段规范化为空数组以保持规则兼容；页面隐藏历史筛选与队伍黄色反馈，并明确提示当前只支持当前队伍。若用户自行导入含历史的数据，兼容能力会自动启用，但这不代表其来源已获官方核验。
 
-更完整的机器可读记录见 [`data/metadata.json`](data/metadata.json)，原始来源快照及许可证位于 `data-snapshots/`。
+更完整的机器可读记录见 [`data/metadata.json`](data/metadata.json)，2026-07-27 bootstrap 与 2026-08-12 production-public-v4 快照及数据许可证位于 `data-snapshots/`。
 
 ## Import / Export
 
@@ -125,7 +128,7 @@ npm run data:validate
 npm run data:update
 ```
 
-更新器默认访问原官方 raw URL，先下载到系统临时目录、校验 schema/昵称唯一性、保留上游省略的现有 `team_history`、输出 diff，并写入 `data-snapshots/candidate-YYYY-MM-DD.json`。默认不会覆盖 canonical 文件。审阅 diff 后显式应用：
+更新器默认访问原官方 raw URL，先下载到系统临时目录、校验 schema/昵称唯一性、保留上游省略的现有 `team_history`、输出 diff，并写入 `data-snapshots/candidate-YYYY-MM-DD.json`。默认不会覆盖 canonical 文件。原 raw URL 在 2026-08-12 仍返回 404，因此该默认命令目前会安全失败，不能替代本次经过浏览器会话和完整覆盖检查的生产快照流程。审阅可信候选的 diff 后才可显式应用：
 
 ```bash
 npm run data:update -- --apply

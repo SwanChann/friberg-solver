@@ -1,14 +1,11 @@
 {
-  "source": "https://github.com/shnlfriberg/csgo-major-db/tree/eb9fd74735039871a5ee00a89a0c50e36d608d0c",
-  "sourceType": "snapshot",
-  "snapshotDate": "2026-07-27",
-  "version": "v31-bootstrap",
+  "source": "https://shnlfriberg.online/search",
+  "sourceType": "official",
+  "snapshotDate": "2026-08-12",
+  "version": "production-v4",
   "playerCount": 646,
-  "retrievedAt": "2026-08-12T13:38:54.1326988+08:00",
-  "notes": "Bootstrap copied from a public extension snapshot after the original official repository became unavailable. Core player fields match the recorded official snapshot; current production parity is not confirmed.",
-  "sourceCommit": "eb9fd74735039871a5ee00a89a0c50e36d608d0c",
-  "mirror": "https://github.com/LilJay-H/csgofriberg-answer-extension",
-  "mirrorCommit": "24bf261121a86b29661c150557785379beb1a035",
-  "sha256": "c10b84d140100fd114b34d0867456e4d30b6da4ede2d7dbf4e0303b31e5e8e6a",
-  "teamHistoryCoverage": "The source snapshot did not contain team_history. This release does not claim historical-team coverage; bundled UI hides history-dependent controls. Imports may omit the field and are normalized to an empty array."
+  "retrievedAt": "2026-08-12T15:50:15.8136796Z",
+  "notes": "Full 646-player snapshot assembled from the official production public roster and rate-limited public search responses through a normal browser session. All public IDs and filtering fields match production version 4; no runtime scraper is bundled.",
+  "sha256": "e474efae1fa257b9dd851c700135f741c243901fa95684acf5dddd2d110c84bc",
+  "teamHistoryCoverage": "The production public API does not expose team_history. This field remains empty for all bundled players; history-dependent controls stay hidden."
 }
