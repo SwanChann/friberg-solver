@@ -14,7 +14,7 @@ export function calculateCandidates(
     if (!matchesManualFilters(target, filters)) return false
     return guesses.every((record) => {
       const guess = playersByNickname.get(record.playerNickname)
-      return guess ? matchesFeedback(guess, record.feedback, target) : false
+      return guess ? matchesFeedback(guess, record.feedback, target, record.includedFields) : false
     })
   })
 }

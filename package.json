@@ -17,6 +17,7 @@
     "counter-strike",
     "cs2",
     "csgofriberg",
+    "ocr",
     "solver",
     "information-gain"
   ],
@@ -35,6 +36,7 @@
   "dependencies": {
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
+    "tesseract.js": "^7.0.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {

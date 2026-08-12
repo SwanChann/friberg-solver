@@ -7,6 +7,7 @@ interface GuessFeedbackEditorProps {
   feedback: GuessFeedback
   compact?: boolean
   teamHistoryEnabled?: boolean
+  includedFields?: FeedbackField[]
   onChange: (feedback: GuessFeedback) => void
 }
 
@@ -28,21 +29,29 @@ export function GuessFeedbackEditor({
   feedback,
   compact = false,
   teamHistoryEnabled = false,
+  includedFields,
   onChange,
 }: GuessFeedbackEditorProps) {
   const setLevel = (field: FeedbackField, level: FeedbackLevel) => {
     const isNumeric = NUMERIC_FEEDBACK_FIELDS.has(field)
+    const nextAttributes = {
+      ...feedback.attributes,
+      [field]: {
+        level,
+        direction: isNumeric && level !== 'correct'
+          ? feedback.attributes[field].direction ?? 'higher'
+          : null,
+      },
+    }
+    if (field === 'nationality') {
+      nextAttributes.region = {
+        level: level === 'wrong' ? 'wrong' : 'correct',
+        direction: null,
+      }
+    }
     onChange({
       ...feedback,
-      attributes: {
-        ...feedback.attributes,
-        [field]: {
-          level,
-          direction: isNumeric && level !== 'correct'
-            ? feedback.attributes[field].direction ?? 'higher'
-            : null,
-        },
-      },
+      attributes: nextAttributes,
     })
   }
 
@@ -50,16 +59,17 @@ export function GuessFeedbackEditor({
     <div className={`feedback-grid ${compact ? 'feedback-grid-compact' : ''}`}>
       {FEEDBACK_FIELDS.map((field) => {
         const attribute = feedback.attributes[field]
+        const isIncluded = !includedFields || includedFields.includes(field)
         const levels: FeedbackLevel[] = closeAllowed.has(field) && (field !== 'team' || teamHistoryEnabled)
           ? ['correct', 'close', 'wrong']
           : ['correct', 'wrong']
         return (
-          <div className="feedback-cell" key={field}>
+          <div className={`feedback-cell ${isIncluded ? '' : 'feedback-cell-ignored'}`} key={field}>
             <div className="feedback-label">
               <span>{FIELD_LABELS[field]}</span>
               <strong title={valueForField(guess, field)}>{valueForField(guess, field)}</strong>
             </div>
-            <div className="feedback-actions">
+            {isIncluded ? <div className="feedback-actions">
               {levels.map((level) => (
                 <button
                   type="button"
@@ -88,10 +98,10 @@ export function GuessFeedbackEditor({
                   })}
                   title="方向表示目标相对猜测值"
                 >
-                  {attribute.direction === 'higher' ? '↑' : '↓'}
+                  {attribute.direction === 'higher' ? '↑' : attribute.direction === 'lower' ? '↓' : '?'}
                 </button>
               )}
-            </div>
+            </div> : <span className="feedback-ignored-label">OCR 未采用</span>}
           </div>
         )
       })}

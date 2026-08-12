@@ -24,3 +24,35 @@ The original source repository was unavailable during implementation. The exact 
 - Commit inspected: `a71a4a256edb609846fa45c8605339323d7eb992`
 - License: MIT
 - Use here: corroborated the published v31 / 2026-07-27 / 646-player snapshot metadata. No source code is bundled.
+
+## Tesseract.js OCR runtime
+
+- Source: https://github.com/naptha/tesseract.js
+- Version: `7.0.0`
+- License: Apache License 2.0
+- Bundled asset: `public/ocr/worker.min.js`
+- SHA-256: `576b7df7e3393e137e51849357c9adb53fe7ac1bb69bfa06cf3d61520f182c6d`
+
+## tesseract.js-core
+
+- Source: https://github.com/naptha/tesseract.js-core
+- Version: `7.0.0`
+- License: Apache License 2.0
+- Bundled assets: the LSTM-only baseline, SIMD, and relaxed-SIMD browser cores under `public/ocr/core/`
+- SHA-256:
+  - `tesseract-core-lstm.wasm.js`: `eef5f8b2f8e20e150680b20adaec4a60babafee3adbe8a94583c81fee46e8680`
+  - `tesseract-core-simd-lstm.wasm.js`: `c58b46a4c796c0b8afccf77591d5b875b6896b45d402bbce8caa6f5362447b38`
+  - `tesseract-core-relaxedsimd-lstm.wasm.js`: `861a536cf9ef8e63cb644d57bab39c388f37f7d6b6f60024b741c5f6b39a59b3`
+
+The complete Apache-2.0 license text used by both runtime packages is retained as `public/ocr/LICENSE.Apache-2.0.txt`.
+
+## Tesseract language data
+
+- Source: https://github.com/naptha/tessdata
+- npm packages: `@tesseract.js-data/eng@1.0.0` and `@tesseract.js-data/chi_sim@1.0.0`, `4.0.0_best_int` variants
+- Package metadata license: MIT; source repository license: Apache License 2.0. The vendored files are conservatively documented and redistributed under the source repository's Apache-2.0 terms.
+- Bundled assets and SHA-256:
+  - `public/ocr/tessdata/eng.traineddata.gz`: `45b4cb346724ac1774f1c36f42f182b887bcdb28ebe63e6fff90ac41f3fcff91`
+  - `public/ocr/tessdata/chi_sim.traineddata.gz`: `b8a23f10c7de500891eb458a8adc9cc58ab7f242f08b7d149f5e9aea4ad5db7c`
+
+These assets run entirely in the browser. Uploaded screenshots are not sent to Tesseract.js, its maintainers, a CDN, or the upstream game.

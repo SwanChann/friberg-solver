@@ -7,7 +7,6 @@ export const MAX_GUESSES = 8
 
 export const FEEDBACK_FIELDS: FeedbackField[] = [
   'nationality',
-  'region',
   'team',
   'age',
   'role',
@@ -24,7 +23,7 @@ export const NUMERIC_FEEDBACK_FIELDS = new Set<FeedbackField>([
 
 export const FIELD_LABELS: Record<FeedbackField, string> = {
   nationality: '国家或地区',
-  region: '赛区',
+  region: '赛区（由国家反馈推导）',
   team: '队伍',
   age: '年龄',
   role: '位置',
