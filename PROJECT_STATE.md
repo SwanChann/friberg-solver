@@ -3,9 +3,9 @@
 - last_verified: 2026-08-12 (tests, build, data tools, and browser smoke)
 - durable_goal: Deliver a reliable local csgofriberg Major player filter and feedback solver that matches the upstream game rules and keeps its dataset provenance explicit.
 - success_criteria: Local UI starts; 646-player bootstrap loads; all non-team-history manual filters, multi-guess inference/edit/delete, recommendations, import/export, persistence, data tooling, tests, build, and smoke verification succeed; historical-team coverage is explicitly out of scope.
-- active_workstream: friberg-solver MVP
-- current_milestone: Non-team-history MVP delivery verified.
-- current_task: Preserve the verified local baseline; real-player historical-team coverage was removed from the required scope by user decision.
+- active_workstream: friberg-solver open-source release
+- current_milestone: Public GitHub release verified.
+- current_task: Maintain the published `SwanChann/friberg-solver` repository from the verified local `main` branch.
 - status: verified
 
 ## Milestones
@@ -15,6 +15,7 @@
 3. [verified] Complete rule, inference, filter, deletion, data-tool, build, and UI smoke verification.
 4. [verified] Finalize README, limitations, and delivery report.
 5. [verified] Re-scope historical-team coverage out of the required release; hide history-dependent controls for the bundled dataset while retaining optional import compatibility.
+6. [verified] Publish the complete project to a public GitHub repository with MIT licensing, contribution guidance, and CI.
 
 ## Verified Facts
 
@@ -31,6 +32,9 @@
 - On 2026-08-12, `npm run data:update` failed safely with HTTP 404 and `npm run data:diff` reported 646 -> 646 with no additions, removals, or changes. No candidate or canonical data file was written.
 - A headless Edge smoke run after the scope change returned HTTP 200, rendered 646 candidates and both tabs, displayed the no-history notice, and did not render the historical-team filter; evidence is `.smoke/solver-home-no-history.png`.
 - Import accepts either a player array or `{ players: [...] }`; omitted `team_history` is normalized to `[]`, while all other required fields remain strictly validated.
+- Public repository `https://github.com/SwanChann/friberg-solver` uses `main` as its default branch; the initial remote commit matched local commit `cb5b0b1e987a1073212cec571c83eb72b8e3f805` exactly.
+- The initial GitHub Actions CI run `31578526769` passed after checking type safety, 63 tests, production build, bundled-data validation, and data diff.
+- The repository includes an MIT `LICENSE`, `CONTRIBUTING.md`, third-party notices, Issues, and focused repository topics; Wiki is disabled.
 
 ## Decisions
 
@@ -38,6 +42,7 @@
 - Reimplement rules independently from the verified behavior and centralize them in `comparePlayers()`; do not copy the upstream service implementation wholesale.
 - Preserve missing historical-team coverage as a visible limitation and never claim full current-production parity without a new authoritative export.
 - Per the user's 2026-08-12 decision, real-player `team_history` coverage is not a release requirement. Hide history-dependent UI for the bundled snapshot; automatically enable compatibility only for user-imported data with non-empty histories.
+- Publish the first open-source release directly on `main` because this was a new empty repository with no existing base branch or collaborators requiring a bootstrap pull request.
 
 ## Risks And Unknowns
 
@@ -46,4 +51,4 @@
 
 ## Next Step And User Decision
 
-- No user decision is required for the agreed scope. Optional future work is limited to UI refinements or a later authoritative data refresh if a public source becomes available.
+- No user decision is required. Future work can proceed through GitHub Issues and focused pull requests; authoritative data refresh remains optional if a trustworthy public source appears.
