@@ -63,6 +63,27 @@ describe('feedback inference', () => {
     expect(matchesFeedback(guess, comparePlayers(guess, never), prior)).toBe(false)
   })
 
+  it('uses only explicitly included OCR fields and ignores uncertain feedback', () => {
+    const guess = makePlayer({ id: 20, nickname: 'guess', age: 25, role: 'Rifler' })
+    const target = makePlayer({ id: 10, nickname: 'target', age: 28, role: 'AWPer' })
+    const ageOnlyCandidate = makePlayer({ id: 11, nickname: 'age-only', age: 28, role: 'Rifler' })
+    const wrongAge = makePlayer({ id: 12, nickname: 'wrong-age', age: 35, role: 'AWPer' })
+    const feedback = comparePlayers(guess, target)
+    expect(matchesFeedback(guess, feedback, ageOnlyCandidate, ['age'])).toBe(true)
+    expect(matchesFeedback(guess, feedback, wrongAge, ['age'])).toBe(false)
+    const record: GuessRecord = {
+      id: 'ocr-1',
+      playerNickname: guess.nickname,
+      feedback,
+      includedFields: ['age'],
+    }
+    expect(calculateCandidates(
+      [guess, target, ageOnlyCandidate, wrongAge],
+      emptyManualFilters(),
+      [record],
+    ).map((player) => player.nickname)).toEqual(['target', 'age-only'])
+  })
+
   it('combines multiple guesses with AND and recomputes from all players after deletion', () => {
     const target = makePlayer({ id: 10, nickname: 'target', nationality: '法国', age: 28, role: 'AWPer' })
     const sameFirstPattern = makePlayer({ id: 11, nickname: 'other', nationality: '丹麦', age: 28, role: 'AWPer' })

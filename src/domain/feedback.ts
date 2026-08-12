@@ -27,6 +27,8 @@ export interface GuessRecord {
   id: string
   playerNickname: string
   feedback: GuessFeedback
+  /** Undefined means every feedback field is active (manual and legacy records). */
+  includedFields?: FeedbackField[]
 }
 
 export function emptyFeedback(): GuessFeedback {

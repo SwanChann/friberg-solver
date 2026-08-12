@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { CandidateTable, type SortState } from '../components/CandidateTable/CandidateTable'
 import { GuessFeedbackEditor } from '../components/GuessFeedbackEditor/GuessFeedbackEditor'
+import { ScreenshotImporter } from '../components/ScreenshotImporter/ScreenshotImporter'
 import { emptyFeedback, type GuessFeedback, type GuessRecord } from '../domain/feedback'
 import { MAX_GUESSES } from '../domain/gameRules'
 import type { Player } from '../domain/player'
@@ -33,7 +34,7 @@ export function SolverPage({
   )
 
   const addGuess = () => {
-    if (!selectedGuess) return
+    if (!selectedGuess || guesses.length >= MAX_GUESSES) return
     onGuessesChange([
       ...guesses,
       {
@@ -54,6 +55,11 @@ export function SolverPage({
 
   return (
     <div className="solver-stack">
+      <ScreenshotImporter
+        players={players}
+        hasTeamHistory={hasTeamHistory}
+        onApply={onGuessesChange}
+      />
       <section className="solver-card guess-composer">
         <div className="panel-heading">
           <div>
@@ -93,10 +99,12 @@ export function SolverPage({
               teamHistoryEnabled={hasTeamHistory}
               onChange={setDraft}
             />
-            <button type="button" className="primary-button" onClick={addGuess}>添加并重新计算</button>
+            <button type="button" className="primary-button" disabled={guesses.length >= MAX_GUESSES} onClick={addGuess}>
+              {guesses.length >= MAX_GUESSES ? '已达到 8 次上限' : '添加并重新计算'}
+            </button>
           </>
         ) : (
-          <p className="empty-hint">从完整游戏候选池选择一名选手后，录入游戏返回的 8 项反馈。</p>
+          <p className="empty-hint">从完整游戏候选池选择一名选手后，录入游戏返回的 7 个可见反馈列。</p>
         )}
       </section>
 
@@ -126,6 +134,7 @@ export function SolverPage({
                     guess={guess}
                     feedback={record.feedback}
                     teamHistoryEnabled={hasTeamHistory}
+                    includedFields={record.includedFields}
                     onChange={(feedback) => onGuessesChange(guesses.map((item) => (
                       item.id === record.id ? { ...item, feedback } : item
                     )))}

@@ -32,6 +32,7 @@ describe('session persistence', () => {
       id: 'guess-1',
       playerNickname: guess.nickname,
       feedback: comparePlayers(guess, target),
+      includedFields: ['age', 'major_appearances'],
     }]
     const expected = {
       tab: 'solver' as const,

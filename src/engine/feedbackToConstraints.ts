@@ -1,4 +1,4 @@
-import type { AttributeFeedback, GuessFeedback } from '../domain/feedback'
+import type { AttributeFeedback, FeedbackField, GuessFeedback } from '../domain/feedback'
 import {
   AGE_CLOSE_RANGE,
   MAJOR_APPEARANCES_CLOSE_RANGE,
@@ -30,9 +30,13 @@ function numericConstraint(
   }
 }
 
-export function feedbackToConstraints(guess: Player, feedback: GuessFeedback): PlayerConstraint[] {
+export function feedbackToConstraints(
+  guess: Player,
+  feedback: GuessFeedback,
+  includedFields?: FeedbackField[],
+): PlayerConstraint[] {
   const a = feedback.attributes
-  return [
+  const constraints: PlayerConstraint[] = [
     {
       field: 'nationality',
       description: `nationality ${a.nationality.level}`,
@@ -90,8 +94,16 @@ export function feedbackToConstraints(guess: Player, feedback: GuessFeedback): P
         : a.is_active.level === 'wrong' && Boolean(target.is_active) !== Boolean(guess.is_active),
     },
   ]
+  if (!includedFields) return constraints
+  const included = new Set(includedFields)
+  return constraints.filter((constraint) => included.has(constraint.field as FeedbackField))
 }
 
-export function matchesFeedback(guess: Player, feedback: GuessFeedback, target: Player): boolean {
-  return feedbackToConstraints(guess, feedback).every((constraint) => constraint.test(target))
+export function matchesFeedback(
+  guess: Player,
+  feedback: GuessFeedback,
+  target: Player,
+  includedFields?: FeedbackField[],
+): boolean {
+  return feedbackToConstraints(guess, feedback, includedFields).every((constraint) => constraint.test(target))
 }
