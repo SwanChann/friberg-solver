@@ -1,12 +1,12 @@
 # Project State
 
-- last_verified: 2026-08-12 (production-v4 canonical data, 69 tests, Pages-mode build, data tools, and automatic browser OCR smoke)
+- last_verified: 2026-08-13 (production-v4 live data, GitHub CI, GitHub Pages deployment, static assets, and online automatic OCR smoke)
 - durable_goal: Deliver a reliable local csgofriberg Major player filter and feedback solver that matches the upstream game rules and keeps its dataset provenance explicit.
 - success_criteria: Local UI starts; the current 646-player canonical dataset loads; all non-team-history manual filters, multi-guess inference/edit/delete, conservative screenshot OCR with automatic apply, recommendations, import/export, persistence, data tooling, tests, build, and smoke verification succeed; historical-team coverage is explicitly out of scope.
 - active_workstream: friberg-solver open-source release
-- current_milestone: Production-v4 player data and GitHub Pages deployment are verified locally on `agent/sync-production-player-data`.
-- current_task: Publish the data/deployment branch, merge it after CI, and verify the live GitHub Pages site.
-- status: in_progress
+- current_milestone: Production-v4 player data and the full OCR solver are published and verified on GitHub Pages.
+- current_task: Maintain the point-in-time dataset and repeat the audited sync process only when a new production refresh is requested.
+- status: verified
 
 ## Milestones
 
@@ -18,7 +18,7 @@
 6. [verified] Publish the complete project to a public GitHub repository with MIT licensing, contribution guidance, and CI.
 7. [verified] Add user-triggered local screenshot OCR with upload/drag/paste, official-theme row/color/arrow detection, conservative player matching, field-level trust, automatic replacement of the current Guess list, and direct candidate/recommendation refresh without human review.
 8. [verified] Audit all 646 bundled players against the official production site's complete public player roster and public filtering attributes, within the published search rate limit.
-9. [in_progress] Publish the production-v4 canonical dataset and GitHub Pages deployment, then verify the live site and OCR asset loading.
+9. [verified] Publish the production-v4 canonical dataset and GitHub Pages deployment, then verify the live site and OCR asset loading.
 
 ## Verified Facts
 
@@ -46,6 +46,9 @@
 - Before synchronization, nationality, region, Major championships, and Major appearances matched for all 646 players, while 185 players had at least one differing current field: team for 116, age for 60, role for 48, and active status for 58; individual players may occur in more than one count.
 - The canonical dataset now matches production version 4 for all public IDs and filtering fields. It has 646 unique nicknames and 646 unique official IDs; `data/players.json` exactly matches `data-snapshots/production-public-v4-2026-08-12.json` with SHA-256 `e474efae...10c84bc`.
 - A Pages-base local preview returned HTTP 200 for the app, favicon, OCR worker, SIMD core, and both language packs. The six-row OCR smoke still automatically applied five trusted rows, discarded ambiguous `NiKo`, narrowed to `jambo`, and produced eight recommendations.
+- GitHub PR #2 merged the production-v4 dataset and Pages workflow into `main` as commit `3d531201b5a2f70d417f5bd73f240019a9ec79de`; PR CI and the subsequent main-branch CI passed: `https://github.com/SwanChann/friberg-solver/pull/2`.
+- GitHub Pages is enabled with the Actions publishing source. Deployment run `31615327127` attempt 2 completed successfully and published `https://swanchann.github.io/friberg-solver/` over enforced HTTPS.
+- Online verification returned HTTP 200 for the site and all OCR assets. A headless Edge run rendered `Dataset vproduction-v4 · 646 人` and reproduced the verified automatic OCR result: five trusted rows, one ignored ambiguous row, candidate `jambo`, and eight recommendations.
 
 ## Decisions
 
@@ -69,4 +72,4 @@
 
 ## Next Step And User Decision
 
-- No user decision is currently required. Publish the verified data/Pages changes through GitHub, then confirm CI, deployment status, live dataset metadata, and online OCR asset availability.
+- No user decision is currently required. The requested database update, GitHub synchronization, website deployment, and online verification are complete.
